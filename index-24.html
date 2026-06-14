@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pioneer Legal Consulting — Rep Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#1a2d4e; --brand-deep:#0f1e36; --brand-light:#3a5a8a; --brand-soft:#e8edf5;
+  --accent:#b8922a; --accent-soft:#f5ead6;
+  --ink:#1a2d4e; --muted:#5a6a7e; --cream:#f3f5f9; --text:#1a2d4e;
+  --border:#d8e0ec; --shadow:0 2px 12px rgba(26,45,78,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hanken Grotesk',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+header{background:radial-gradient(700px 320px at 12% -40%,var(--brand-soft),transparent 60%),radial-gradient(600px 300px at 100% -30%,var(--accent-soft),transparent 55%),#fff;color:var(--ink);padding:26px 40px 24px;margin-bottom:32px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),#e2c97a,var(--accent));}
+.hdr-row{display:flex;align-items:center;gap:16px;max-width:640px;margin:0 auto;}
+.hdr-text{flex:1;}
+.firm-name{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.01em;color:var(--brand-deep);}
+.page-title{font-size:13px;color:var(--muted);margin-top:2px;}
+.contact-bar{font-size:11px;color:var(--muted);opacity:0.8;margin-top:6px;}
+.powered{font-size:10px;color:var(--accent);letter-spacing:0.04em;margin-top:4px;font-weight:600;}
+.page-wrap{max-width:640px;margin:0 auto;padding:0 20px 60px;}
+.steps-wrap{display:flex;align-items:center;margin-bottom:28px;}
+.step{display:flex;flex-direction:column;align-items:center;flex:1;}
+.step-circle{width:32px;height:32px;border-radius:50%;background:#ddd;color:#999;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:all 0.3s;}
+.step-circle.active{background:var(--brand);color:white;}
+.step-circle.done{background:var(--accent);color:white;}
+.step-label{font-size:10px;color:var(--muted);margin-top:4px;text-align:center;letter-spacing:0.03em;}
+.step-line{flex:1;height:2px;background:#ddd;margin:0 4px;margin-bottom:18px;transition:background 0.3s;}
+.step-line.done{background:var(--accent);}
+.card{background:white;border-radius:8px;box-shadow:var(--shadow);border:1px solid var(--border);padding:32px;margin-bottom:20px;}
+.card-title{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;color:var(--brand-deep);margin-bottom:6px;}
+.card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5;}
+.option-grid{display:grid;gap:12px;}
+.option-grid.two{grid-template-columns:1fr 1fr;}
+@media(max-width:480px){.option-grid.two{grid-template-columns:1fr;}}
+.option-card{border:2px solid var(--border);border-radius:8px;padding:18px 20px;cursor:pointer;transition:all 0.2s;background:white;text-align:left;font-family:inherit;width:100%;display:flex;align-items:center;gap:14px;}
+.option-card:hover{border-color:var(--accent);background:var(--accent-soft);}
+.option-card.selected{border-color:var(--brand);background:var(--brand-soft);}
+.option-badge{width:42px;height:42px;border-radius:9px;background:var(--brand-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.option-badge .initial{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:var(--brand);}
+.option-icon{font-size:24px;}
+.option-body{flex:1;}
+.option-title{font-size:15px;font-weight:600;color:var(--brand-deep);margin-bottom:3px;}
+.option-sub{font-size:12px;color:var(--muted);}
+.field-group{margin-bottom:16px;}
+.field-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:5px;display:block;}
+.req{color:#c0392b;}
+.field-input{width:100%;font-family:inherit;font-size:14px;color:var(--text);background:white;border:1px solid var(--border);border-radius:4px;padding:10px 12px;outline:none;transition:border-color 0.15s;}
+.field-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(184,146,42,0.12);}
+.field-input.error{border-color:#c0392b;}
+.field-row{display:grid;gap:14px;}
+.field-row.two{grid-template-columns:1fr 1fr;}
+.field-row.three{grid-template-columns:1fr 1fr 1fr;}
+@media(max-width:500px){.field-row.two,.field-row.three{grid-template-columns:1fr;}}
+.dollar-wrap{position:relative;}
+.dollar-wrap::before{content:'$';position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none;}
+.dollar-wrap .field-input{padding-left:24px;}
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
+.btn-row{display:flex;gap:10px;margin-top:20px;}
+.next-btn{flex:1;background:linear-gradient(135deg,var(--brand),var(--brand-deep));color:white;border:none;padding:13px;border-radius:6px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 3px 10px rgba(26,45,78,0.25);}
+.next-btn:hover{transform:translateY(-1px);}
+.next-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.back-btn{background:transparent;color:var(--muted);border:1px solid var(--border);padding:13px 20px;border-radius:6px;font-family:inherit;font-size:14px;cursor:pointer;transition:all 0.2s;}
+.back-btn:hover{border-color:var(--brand);color:var(--brand);}
+.result-card{display:none;background:white;border-radius:8px;box-shadow:var(--shadow);border:2px solid var(--accent);padding:28px;margin-bottom:20px;}
+.result-card.active{display:block;}
+.result-title{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;color:var(--brand-deep);margin-bottom:6px;}
+.result-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.client-summary{background:var(--brand-soft);border-radius:6px;padding:14px 16px;font-size:13px;line-height:1.8;margin-bottom:20px;color:var(--text);}
+.client-summary strong{color:var(--brand-deep);}
+.link-section{margin-bottom:16px;}
+.link-section-title{font-size:12px;font-weight:600;color:var(--brand-deep);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;}
+.link-box{background:var(--brand-soft);border:1px solid var(--brand-light);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--brand-deep);word-break:break-all;margin-bottom:10px;font-family:monospace;line-height:1.5;}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;}
+.copy-btn{flex:1;min-width:80px;background:var(--brand);color:white;border:none;padding:10px 12px;border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.2s;text-align:center;}
+.copy-btn:hover{background:var(--brand-deep);}
+.copy-btn.copied{background:#2d6a4f;}
+.sms-btn,.email-btn{flex:1;min-width:80px;background:transparent;color:var(--brand);border:1px solid var(--brand);padding:10px 12px;border-radius:6px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;}
+.sms-btn:hover,.email-btn:hover{background:rgba(26,45,78,0.05);}
+.new-btn{width:100%;margin-top:16px;background:transparent;color:var(--muted);border:1px solid var(--border);padding:11px;border-radius:6px;font-family:inherit;font-size:13px;cursor:pointer;transition:all 0.2s;}
+.new-btn:hover{border-color:var(--brand);color:var(--brand);}
+.pin-wrap{display:none;margin-top:16px;}
+.pin-wrap.visible{display:block;}
+.pin-input{font-family:inherit;font-size:22px;font-weight:600;letter-spacing:0.3em;color:var(--brand-deep);text-align:center;border:2px solid var(--border);border-radius:6px;padding:10px 16px;width:160px;outline:none;transition:border-color 0.15s;background:white;}
+.pin-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(184,146,42,0.12);}
+.pin-error{color:#c0392b;font-size:12.5px;margin-top:6px;display:none;}
+.pin-error.active{display:block;}
+.pin-confirm-btn{background:var(--brand);color:white;border:none;padding:10px 24px;border-radius:6px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;margin-left:10px;transition:background 0.2s;vertical-align:top;}
+.pin-confirm-btn:hover{background:var(--brand-deep);}
+.pp-divider{border-top:1px solid var(--border);margin-top:20px;padding-top:20px;}
+.doc-note{font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-row">
+    <div class="hdr-text">
+      <div class="firm-name">Pioneer Legal Consulting, LLC</div>
+      <div class="page-title">Rep Portal — Send Client Documents</div>
+      <div class="contact-bar">For internal rep use only &middot; 313-604-8601</div>
+      <div class="powered">plcclientportal.netlify.app</div>
+    </div>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <div class="steps-wrap">
+    <div class="step"><div class="step-circle active" id="sc1">1</div><div class="step-label">Rep</div></div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step"><div class="step-circle" id="sc2">2</div><div class="step-label">Language</div></div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step"><div class="step-circle" id="sc3">3</div><div class="step-label">Client Info</div></div>
+    <div class="step-line" id="sl3"></div>
+    <div class="step"><div class="step-circle" id="sc4">4</div><div class="step-label">Send Links</div></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="card" id="step1">
+    <div class="card-title">Who are you?</div>
+    <div class="card-sub">Select your name and enter your PIN. This routes signed documents to your folder in Drive.</div>
+    <div class="option-grid" id="rep-grid"></div>
+    <div class="pin-wrap" id="pin-wrap">
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Enter Your PIN</div>
+      <div style="display:flex;align-items:center;">
+        <input class="pin-input" type="password" id="pin-input" maxlength="6" placeholder="••••" onkeydown="if(event.key==='Enter') confirmPIN()">
+        <button class="pin-confirm-btn" onclick="confirmPIN()">Confirm</button>
+      </div>
+      <div class="pin-error" id="pin-error">Incorrect PIN. Please try again.</div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);font-style:italic;">Additional reps will appear here as they are added.</div>
+    <div class="btn-row"><button class="next-btn" id="s1next" disabled onclick="goStep(2)">Next →</button></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card" id="step2" style="display:none;">
+    <div class="card-title">Document Language</div>
+    <div class="card-sub">Select the language for the client-facing documents.</div>
+    <div class="option-grid two">
+      <div class="option-card" onclick="selectLang('en',this)" role="button" tabindex="0">
+        <div class="option-icon">🇺🇸</div><div class="option-body"><div class="option-title">English</div><div class="option-sub">Standard documents</div></div>
+      </div>
+      <div class="option-card" onclick="selectLang('es',this)" role="button" tabindex="0">
+        <div class="option-icon">🇲🇽</div><div class="option-body"><div class="option-title">Español</div><div class="option-sub">Documentos en español</div></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="back-btn" onclick="goStep(1)">← Back</button>
+      <button class="next-btn" id="s2next" disabled onclick="goStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card" id="step3" style="display:none;">
+    <div class="card-title">Client Information</div>
+    <div class="card-sub">Fill in the client's details. These will be pre-populated in the document links.</div>
+    <div class="field-row two">
+      <div class="field-group"><label class="field-label">First Name <span class="req">*</span></label><input class="field-input" type="text" id="cf" placeholder="First name"></div>
+      <div class="field-group"><label class="field-label">Last Name <span class="req">*</span></label><input class="field-input" type="text" id="cl" placeholder="Last name"></div>
+    </div>
+    <div class="field-group"><label class="field-label">Co-Client Name (if applicable)</label><input class="field-input" type="text" id="cc" placeholder="Full name of co-client"></div>
+    <div class="field-group"><label class="field-label">Home Address with Solar <span class="req">*</span></label><input class="field-input" type="text" id="addr" placeholder="Street address"></div>
+    <div class="field-row three">
+      <div class="field-group"><label class="field-label">City <span class="req">*</span></label><input class="field-input" type="text" id="cty" placeholder="City"></div>
+      <div class="field-group"><label class="field-label">State <span class="req">*</span></label><input class="field-input" type="text" id="st" placeholder="State" maxlength="2"></div>
+      <div class="field-group"><label class="field-label">ZIP <span class="req">*</span></label><input class="field-input" type="text" id="zp" placeholder="ZIP" maxlength="10"></div>
+    </div>
+    <div class="field-row two">
+      <div class="field-group"><label class="field-label">Client Phone</label><input class="field-input" type="tel" id="cp" placeholder="(555) 555-5555"></div>
+      <div class="field-group"><label class="field-label">Client Email</label><input class="field-input" type="email" id="ce" placeholder="client@email.com"></div>
+    </div>
+    <div class="field-group"><label class="field-label">Service Fee <span class="req">*</span></label><div class="dollar-wrap" style="max-width:200px;"><input class="field-input" type="text" id="fee" placeholder="0.00"></div></div>
+
+    <hr class="divider">
+    <div class="field-group">
+      <label class="field-label">Documents to Send <span class="req">*</span></label>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:white;font-size:14px;">
+          <input type="checkbox" id="doc_contract" checked style="width:16px;height:16px;accent-color:var(--brand);cursor:pointer;">
+          <span>📄 Client Services Agreement (Contract)</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:white;font-size:14px;">
+          <input type="checkbox" id="doc_lor" style="width:16px;height:16px;accent-color:var(--brand);cursor:pointer;">
+          <span>📋 Letter of Representation (LOR) — Post-Payment</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:white;font-size:14px;">
+          <input type="checkbox" id="doc_vis" style="width:16px;height:16px;accent-color:var(--brand);cursor:pointer;">
+          <span>📝 Intake / VIS — Post-Payment</span>
+        </label>
+      </div>
+      <div class="doc-note">LOR and VIS are for post-payment sends only. The Client Services Agreement is for initial signing.</div>
+    </div>
+    <div class="btn-row">
+      <button class="back-btn" onclick="goStep(2)">← Back</button>
+      <button class="next-btn" onclick="generate()">Generate Links →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="result-card" id="step4">
+    <div class="result-title">✅ Document Link(s) Ready</div>
+    <div class="result-sub">Share these links with the client via text or email.</div>
+    <div class="client-summary" id="summary"></div>
+    <div class="link-section" id="main-link-section">
+      <div class="link-section-title">📄 Client Services Agreement</div>
+      <div class="link-box" id="main-link"></div>
+      <div class="action-row">
+        <button class="copy-btn" id="copy-main" onclick="copyL('main')">📋 Copy</button>
+        <a class="sms-btn" id="sms-main" href="#">💬 Text</a>
+        <a class="email-btn" id="email-main" href="#">✉️ Email</a>
+      </div>
+    </div>
+    <button class="new-btn" onclick="reset()">+ Prepare Another Client</button>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// PLC REP PORTAL
+// Generates prefilled, PIN-routed links to:
+//   https://plcclientportal.netlify.app          (Contract)
+//   https://plcclientportal.netlify.app/lor.html (LOR)
+//   https://plcclientportal.netlify.app/vis.html (VIS/Intake)
+//
+// The PIN routes all submissions to the correct rep folder
+// in the PLC Pioneer Legal Portal Shared Drive via Code.gs.
+// ============================================================
+
+// ---- PLC CLIENT PORTAL BASE URL (NEVER change to EnergyPure) ----
+var BASE     = 'https://plcclientportal.netlify.app';
+var CONTRACT_URL = BASE + '/index.html';
+var LOR_URL      = BASE + '/lor.html';
+var VIS_URL      = BASE + '/vis.html';
+
+// ---- PLC REP ROSTER ------------------------------------------------
+// PIN must match exactly what is in Code.gs REPS registry.
+// name/sub display only; adminEmails not used here (handled by backend).
+// To add a rep: copy a block, set the correct PIN, name, and sub.
+// -------------------------------------------------------------------
+var REPS = {
+  '0000': { name: 'PLC HQ',       sub: 'Direct PLC client'       },
+  '0055': { name: 'Spencer',      sub: 'spencer@plc-us.com'      },
+  '6159': { name: 'Brandy',       sub: 'brandy@plc-us.com'       },
+  '7866': { name: 'Ben',          sub: 'bmonroe@plc-us.com'      },
+  '8488': { name: 'Brittany',     sub: 'brittany@plc-us.com'     },
+  '4585': { name: 'Joe Cormier',  sub: 'joe.cormier@plc-us.com'  },
+  '3624': { name: 'Wayne',        sub: 'wsnyder@plc-us.com'      },
+  '0684': { name: 'Stephanie',    sub: 'stephanie.krespach@plc-us.com' },
+  '2500': { name: 'Renae',        sub: 'rwalen@plc-us.com'       },
+  '8161': { name: 'Ramon',        sub: 'Email pending'           }
+};
+// -------------------------------------------------------------------
+
+var selectedPin = null;
+var selectedRep = null;
+var selectedLang = null;
+
+// Build rep selection grid from REPS roster
+function initRoster(){
+  var grid = document.getElementById('rep-grid');
+  grid.innerHTML = '';
+  Object.keys(REPS).forEach(function(p){
+    var r = REPS[p];
+    var card = document.createElement('div');
+    card.className = 'option-card';
+    card.setAttribute('role','button');
+    card.tabIndex = 0;
+    var initial = r.name.charAt(0).toUpperCase();
+    card.innerHTML =
+      '<div class="option-badge"><span class="initial">'+initial+'</span></div>'+
+      '<div class="option-body">'+
+        '<div class="option-title">'+r.name+'</div>'+
+        '<div class="option-sub">'+r.sub+'</div>'+
+      '</div>';
+    card.onclick = function(){ selectRep(p, card); };
+    card.onkeydown = function(e){ if(e.key==='Enter'||e.key===' ') selectRep(p, card); };
+    grid.appendChild(card);
+  });
+}
+
+function selectRep(p, el){
+  selectedPin = p;
+  selectedRep = REPS[p];
+  document.querySelectorAll('#step1 .option-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  document.getElementById('pin-wrap').classList.add('visible');
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-error').classList.remove('active');
+  document.getElementById('s1next').disabled = true;
+  setTimeout(function(){ document.getElementById('pin-input').focus(); }, 100);
+}
+
+function confirmPIN(){
+  var entered = document.getElementById('pin-input').value.trim();
+  if(entered === selectedPin){
+    document.getElementById('pin-error').classList.remove('active');
+    document.getElementById('pin-input').style.borderColor = '#2d6a4f';
+    document.getElementById('s1next').disabled = false;
+  } else {
+    document.getElementById('pin-error').classList.add('active');
+    document.getElementById('pin-input').value = '';
+    document.getElementById('s1next').disabled = true;
+  }
+}
+
+function selectLang(v, el){
+  selectedLang = v;
+  document.querySelectorAll('#step2 .option-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  document.getElementById('s2next').disabled = false;
+}
+
+function goStep(n){
+  [1,2,3].forEach(function(i){
+    var el = document.getElementById('step'+i);
+    if(el) el.style.display = 'none';
+  });
+  var next = document.getElementById('step'+n);
+  if(next) next.style.display = 'block';
+  [1,2,3,4].forEach(function(i){
+    var c = document.getElementById('sc'+i);
+    if(!c) return;
+    if(i < n){ c.className = 'step-circle done'; c.textContent = '✓'; }
+    else if(i === n){ c.className = 'step-circle active'; c.textContent = i; }
+    else { c.className = 'step-circle'; c.textContent = i; }
+  });
+  [1,2,3].forEach(function(i){
+    var l = document.getElementById('sl'+i);
+    if(l) l.className = i < n ? 'step-line done' : 'step-line';
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function g(id){ return (document.getElementById(id)||{}).value||''; }
+
+function generate(){
+  var sendContract = document.getElementById('doc_contract').checked;
+  var sendLOR      = document.getElementById('doc_lor').checked;
+  var sendVIS      = document.getElementById('doc_vis').checked;
+
+  if(!sendContract && !sendLOR && !sendVIS){
+    alert('Select at least one document to send.');
+    return;
+  }
+
+  // Required fields (service fee only required for contract)
+  var req = ['cf','cl','addr','cty','st','zp'];
+  if(sendContract) req.push('fee');
+  var ok = true;
+  req.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el && !el.value.trim()){ el.classList.add('error'); ok = false; }
+    else if(el){ el.classList.remove('error'); }
+  });
+  if(!ok){ alert('Please complete all required fields.'); return; }
+
+  var first  = g('cf').trim();
+  var last   = g('cl').trim();
+  var co     = g('cc').trim();
+  var addr   = g('addr').trim();
+  var city   = g('cty').trim();
+  var state  = g('st').trim();
+  var zip    = g('zp').trim();
+  var fee    = g('fee').trim();
+  var phone  = g('cp').trim();
+  var email  = g('ce').trim();
+  var name   = co ? (first+' '+last+' & '+co) : (first+' '+last);
+  var fullAddr = addr+', '+city+', '+state+' '+zip;
+  var isEs   = (selectedLang === 'es');
+  var langCode = isEs ? 'es' : 'en';
+  var repName  = selectedRep.name;
+
+  // Client summary card
+  document.getElementById('summary').innerHTML =
+    '<strong>Client:</strong> '+name+'<br>'+
+    '<strong>Address:</strong> '+fullAddr+'<br>'+
+    (fee ? '<strong>Service Fee:</strong> $'+fee+'<br>' : '')+
+    '<strong>Language:</strong> '+(isEs ? 'Spanish / Español' : 'English')+'<br>'+
+    '<strong>Rep:</strong> '+repName;
+
+  // ---- CONTRACT LINK ----
+  // Routes to plcclientportal.netlify.app/index.html
+  if(sendContract){
+    var cp = new URLSearchParams({
+      pin:            selectedPin,
+      lang:           langCode,
+      client_names:   name,
+      home_address:   addr,
+      city:           city,
+      state:          state,
+      zip:            zip,
+      service_fee:    '$'+fee,
+      rep_name:       repName,
+      client_email:   email||'',
+      client_phone:   phone||'',
+      prefilled:      '1'
+    });
+    var contractLink = CONTRACT_URL + '?' + cp.toString();
+    document.getElementById('main-link-section').style.display = 'block';
+    document.getElementById('main-link').textContent = contractLink;
+    setButtons('main', contractLink, first, name, repName, phone, email, 'Client Services Agreement', isEs);
+  } else {
+    document.getElementById('main-link-section').style.display = 'none';
+  }
+
+  // ---- LOR LINK ----
+  // Routes to plcclientportal.netlify.app/lor.html
+  injectResult('lor', '📋 Letter of Representation', sendLOR, function(){
+    var p = new URLSearchParams({
+      pin:            selectedPin,
+      lang:           langCode,
+      client_name:    name,
+      client_address: fullAddr,
+      client_email:   email||'',
+      client_phone:   phone||'',
+      rep_name:       repName,
+      prefilled:      '1'
+    });
+    return LOR_URL + '?' + p.toString();
+  }, first, name, repName, phone, email, 'Letter of Representation', isEs);
+
+  // ---- VIS / INTAKE LINK ----
+  // Routes to plcclientportal.netlify.app/vis.html
+  injectResult('vis', '📝 Intake / VIS', sendVIS, function(){
+    var p = new URLSearchParams({
+      pin:              selectedPin,
+      lang:             langCode,
+      full_name:        name,
+      property_address: fullAddr,
+      email:            email||'',
+      phone:            phone||'',
+      rep_name:         repName,
+      prefilled:        '1'
+    });
+    return VIS_URL + '?' + p.toString();
+  }, first, name, repName, phone, email, 'Intake / VIS', isEs);
+
+  // Show step 4
+  var s4 = document.getElementById('step4');
+  s4.style.display = 'block';
+  s4.classList.add('active');
+  [1,2,3].forEach(function(i){ var el=document.getElementById('step'+i); if(el) el.style.display='none'; });
+  [1,2,3,4].forEach(function(i){
+    var c = document.getElementById('sc'+i);
+    if(!c) return;
+    if(i < 4){ c.className='step-circle done'; c.textContent='✓'; }
+    else { c.className='step-circle active'; c.textContent='4'; }
+  });
+  [1,2,3].forEach(function(i){ var l=document.getElementById('sl'+i); if(l) l.className='step-line done'; });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function injectResult(pfx, title, show, linkFn, first, name, repName, phone, email, doc, isEs){
+  var res = document.getElementById(pfx+'-result');
+  if(!show){
+    if(res) res.style.display = 'none';
+    return;
+  }
+  if(!res){
+    res = document.createElement('div');
+    res.id = pfx+'-result';
+    res.className = 'pp-divider';
+    res.innerHTML =
+      '<div class="link-section">'+
+        '<div class="link-section-title">'+title+'</div>'+
+        '<div class="link-box" id="'+pfx+'-link"></div>'+
+        '<div class="action-row">'+
+          '<button class="copy-btn" id="copy-'+pfx+'" onclick="copyL(\''+pfx+'\')">📋 Copy</button>'+
+          '<a class="sms-btn" id="sms-'+pfx+'" href="#">💬 Text</a>'+
+          '<a class="email-btn" id="email-'+pfx+'" href="#">✉️ Email</a>'+
+        '</div>'+
+      '</div>';
+    var newBtn = document.querySelector('#step4 .new-btn');
+    document.getElementById('step4').insertBefore(res, newBtn);
+  }
+  res.style.display = 'block';
+  var link = linkFn();
+  document.getElementById(pfx+'-link').textContent = link;
+  setButtons(pfx, link, first, name, repName, phone, email, doc, isEs);
+}
+
+function setButtons(pfx, link, first, name, repName, phone, email, doc, isEs){
+  // SMS and email copy reference Pioneer Legal Consulting — NOT EnergyPure
+  var msg = isEs
+    ? 'Hola '+first+', Pioneer Legal Consulting ha preparado su documento. Por favor revíselo y fírmelo: '+link
+    : 'Hi '+first+', Pioneer Legal Consulting has prepared your '+doc+'. Please review and sign here: '+link;
+  var subj = isEs
+    ? 'Su Documento – Pioneer Legal Consulting'
+    : 'Your '+doc+' – Pioneer Legal Consulting';
+  var body = isEs
+    ? 'Estimado/a '+first+',\n\nSu documento está listo para revisar y firmar:\n\n'+link+'\n\nPreguntas: 313-604-8601\n\n'+repName+'\nPioneer Legal Consulting, LLC'
+    : 'Dear '+first+',\n\nYour '+doc+' is ready for your signature:\n\n'+link+'\n\nQuestions? Call 313-604-8601.\n\n'+repName+'\nPioneer Legal Consulting, LLC';
+
+  var sBtn = document.getElementById('sms-'+pfx);
+  var eBtn = document.getElementById('email-'+pfx);
+  if(sBtn) sBtn.href = phone
+    ? 'sms:'+phone.replace(/\D/g,'')+'?body='+encodeURIComponent(msg)
+    : 'sms:?body='+encodeURIComponent(msg);
+  if(eBtn) eBtn.href = email
+    ? 'mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body)
+    : 'mailto:?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+}
+
+function copyL(pfx){
+  var txt = document.getElementById(pfx+'-link').textContent;
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn = document.getElementById('copy-'+pfx);
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+
+function reset(){
+  selectedPin = null;
+  selectedRep = null;
+  selectedLang = null;
+  var s4 = document.getElementById('step4');
+  s4.classList.remove('active');
+  s4.style.display = 'none';
+  document.querySelectorAll('.option-card').forEach(function(c){ c.classList.remove('selected'); });
+  document.getElementById('pin-wrap').classList.remove('visible');
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-input').style.borderColor = '';
+  document.getElementById('pin-error').classList.remove('active');
+  document.getElementById('s1next').disabled = true;
+  document.getElementById('s2next').disabled = true;
+  ['cf','cl','cc','addr','cty','st','zp','fee','rn','cp','ce'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el){ el.value = ''; el.classList.remove('error'); }
+  });
+  ['lor','vis'].forEach(function(p){
+    var r = document.getElementById(p+'-result');
+    if(r) r.style.display = 'none';
+  });
+  document.getElementById('doc_contract').checked = true;
+  document.getElementById('doc_lor').checked = false;
+  document.getElementById('doc_vis').checked = false;
+  document.getElementById('main-link-section').style.display = 'block';
+  goStep(1);
+}
+
+// Initialize on load
+initRoster();
+</script>
+</body>
+</html>
